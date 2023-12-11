@@ -64,27 +64,43 @@
 
         // Create connection
         $conn = new mysqli($servername, $username, $password, $database);
-
         // Check connection
         if($conn->connect_error) {
+            // Stops script execution if connection fails
             die("Connection failed: $conn->connect_error");
         } else {
             echo "Connected successfully <hr>";
         };
-
         $id = $_GET["id"];
         // Prepared statement
-        $sql = "SELECT * FROM users WHERE id='$id'";
-        $result = $conn->query($sql);
+        $query = $conn->prepare("SELECT * FROM users WHERE id=?");
+        // "i" - integer
+        $query->bind_param("i", $id);
+        $query->execute();
+        // Obtain result and store it in a variable
+        $result = $query->get_result();
         if($result->num_rows > 0) {
+            // fetch_assoc() : Fetch a result row as an associative array
             while($row = $result->fetch_assoc()) {
                 $fname = $row["firstname"];
                 $lname = $row["lastname"];
                 $email = $row["email"];
             }
         } else {
-            echo "0 results";
+            echo "No records <hr>";
         }
+
+        // $query = "SELECT * FROM users WHERE id='$id'";
+        // $result = $conn->query($sql);
+        // if($result->num_rows > 0) {
+        //     while($row = $result->fetch_assoc()) {
+        //         $fname = $row["firstname"];
+        //         $lname = $row["lastname"];
+        //         $email = $row["email"];
+        //     }
+        // } else {
+        //     echo "0 results";
+        // }
 
         $conn->close();
 

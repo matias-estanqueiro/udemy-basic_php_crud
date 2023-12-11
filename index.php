@@ -58,29 +58,33 @@
     <div class="users_container">
 
     <?php
-        $sql = "SELECT id, firstname, lastname, email FROM users";
-        $result = $conn->query($sql);
-
-        if ($result->num_rows > 0) {
+        // $sql = "SELECT id, firstname, lastname, email FROM users";
+        // $result = $conn->query($sql);
+        // if ($result->num_rows > 0) {
+        
+        // Prepared statement
+        $query = $conn->prepare("SELECT id, firstname, lastname, email FROM users");
+        $query->execute();
+        $result = $query->get_result();
+        if($result->num_rows > 0) {
             // output data of each row
             while($row = $result->fetch_assoc()) {
     ?>
-                
-                    <div class="user" style="border : 1px solid black; margin: 10px 0; padding: 10px">
-                        <p class="p_user" style="margin: 0; padding = 0;">ID: <?php echo $row["id"]; ?></p>
-                        <p class="p_user" style="margin: 0; padding = 0;">First Name: <?php echo $row["firstname"]; ?></p>
-                        <p class="p_user" style="margin: 0; padding = 0;">Last Name: <?php echo $row["lastname"]; ?></p>
-                        <p class="p_user" style="margin: 0; padding = 0;">Email: <?php echo $row["email"]; ?></p>
-                        <a href="delete.php?id=<?php echo $row["id"] ?>" style="display: flex">Delete</a>
-                        <a href="update.php?id=<?php echo $row["id"] ?>" style="display: flex">Update</a>
-                    </div>
+                <div class="user" style="border : 1px solid black; margin: 10px 0; padding: 10px">
+                    <p class="p_user" style="margin: 0; padding = 0;">ID: <?php echo $row["id"]; ?></p>
+                    <p class="p_user" style="margin: 0; padding = 0;">First Name: <?php echo $row["firstname"]; ?></p>
+                    <p class="p_user" style="margin: 0; padding = 0;">Last Name: <?php echo $row["lastname"]; ?></p>
+                    <p class="p_user" style="margin: 0; padding = 0;">Email: <?php echo $row["email"]; ?></p>
+                    <a href="delete.php?id=<?php echo $row["id"] ?>" style="display: flex">Delete</a>
+                    <a href="update.php?id=<?php echo $row["id"] ?>" style="display: flex">Update</a>
+                </div>
     </div>
+
     <?php
             }
         } else {
             echo "No records <hr>";
         }
-        
         $conn->close();
     ?>
 

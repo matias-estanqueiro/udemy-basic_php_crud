@@ -25,7 +25,7 @@
     // Close connection
     $conn->close();
 
-    // // SQL query to delete a record
+    // SQL query to delete a record
     // $sql = "DELETE FROM users WHERE id='$id'";
 
     // if ($conn->query($sql) === TRUE) {
